@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
+import { Container, Nav, Navbar, NavLink, Offcanvas } from "react-bootstrap";
 import logo from "../../assets/logo.jpg";
 import { supabase } from "../../database/supabaseconfig";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const NavbarModaExpress = () => {
     const [mostrarMenu, setMostrarMenu] = useState(false);
@@ -50,7 +51,7 @@ const NavbarModaExpress = () => {
                 </Nav.Link>
             </Nav>
         );
-    } 
+    }
     else if (esCatalogo) {
         contenidoMenu = (
             <Nav className="ms-auto pe-2">
@@ -63,7 +64,7 @@ const NavbarModaExpress = () => {
                 </Nav.Link>
             </Nav>
         );
-    } 
+    }
     else {
         contenidoMenu = (
             <Nav className="ms-auto pe-2">
@@ -103,17 +104,14 @@ const NavbarModaExpress = () => {
                     <strong>Catálogo</strong>
                 </Nav.Link>
 
-                <hr />
 
-                {/* Cerrar sesión (versión simple) */}
-                {mostrarMenu && (
-                    <Nav.Link
-                        onClick={cerrarSesion}
-                        className={mostrarMenu ? "color-texto-marca" : "text-white"}
+                {mostrarMenu ? null : (
+                    <NavLink
+                    onClick={cerrarSesion}
+                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
                     >
-                        <i className="bi bi-box-arrow-right me-2"></i>
-                        Cerrar sesión
-                    </Nav.Link>
+                        <i className="bi-box-arrow-right me-2"></i>
+                    </NavLink>
                 )}
 
                 <hr />
@@ -139,7 +137,7 @@ const NavbarModaExpress = () => {
         );
     }
 
-    
+
     return (
         <Navbar
             expand="md"
