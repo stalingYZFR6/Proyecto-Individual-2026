@@ -212,7 +212,7 @@ const Categorias = () => {
 
                 <Row>
 
-                    {/* 📱 TARJETAS (MÓVIL) */}
+                    {/*  TARJETAS (MÓVIL) */}
                     <Col xs={12} className="d-lg-none">
                         <TarjetaCategoria
                             categorias={categorias}
@@ -221,7 +221,7 @@ const Categorias = () => {
                         />
                     </Col>
 
-                    {/* 💻 TABLA (ESCRITORIO) */}
+                    {/*  TABLA (ESCRITORIO) */}
                     <Col xs={12} className="d-none d-lg-block">
                         <TablaCategorias
                             categorias={categorias}
