@@ -196,7 +196,13 @@ const Categorias = () => {
                 </Col>
                 <Col xs={3} className="text-end">
                     <Button onClick={() => setMostrarModal(true)}>
-                        Nueva Categoría
+                        {/* Icono siempre visible */}
+                        <i className="bi bi-plus-lg"></i>
+
+                        {/* Texto solo en pantallas grandes */}
+                        <span className="d-none d-sm-inline ms-2">
+                            Nueva Categoría
+                        </span>
                     </Button>
                 </Col>
             </Row>
@@ -221,7 +227,9 @@ const Categorias = () => {
                         />
                     </Col>
 
-                    {/*  TABLA (ESCRITORIO) */}
+                    {/* 
+                    
+                    TABLA (ESCRITORIO) */}
                     <Col xs={12} className="d-none d-lg-block">
                         <TablaCategorias
                             categorias={categorias}
