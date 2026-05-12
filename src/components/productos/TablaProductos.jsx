@@ -65,22 +65,24 @@ const TablaProductos = ({
                         </td>
 
                         <td className="text-center">
+
                             <Button
-                                variant="warning"
+                                variant="outline-warning"
                                 size="sm"
                                 className="me-2"
                                 onClick={() => onEditar(prod)}
                             >
-                                <i className="bi-pencil-square"></i>
+                                <i className="bi bi-pencil-square"></i>
                             </Button>
 
                             <Button
-                                variant="danger"
+                                variant="outline-danger"
                                 size="sm"
                                 onClick={() => onEliminar(prod)}
                             >
-                                <i className="bi-trash"></i>
+                                <i className="bi bi-trash"></i>
                             </Button>
+
                         </td>
                     </tr>
                 ))}

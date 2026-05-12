@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Container, Nav, Navbar, NavLink, Offcanvas } from "react-bootstrap";
 import logo from "../../assets/logo.jpg";
@@ -7,6 +7,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const NavbarModaExpress = () => {
     const [mostrarMenu, setMostrarMenu] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -16,6 +18,33 @@ const NavbarModaExpress = () => {
         navigate(ruta);
         setMostrarMenu(false);
     };
+
+    // =========================
+    // 🌙 MODO OSCURO
+    // =========================
+    const toggleDarkMode = () => {
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        localStorage.setItem("darkMode", newMode.toString());
+        document.documentElement.setAttribute(
+            "data-bs-theme",
+            newMode ? "dark" : "light"
+        );
+    };
+
+    useEffect(() => {
+        const savedMode = localStorage.getItem("darkMode");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        const shouldBeDark =
+            savedMode !== null ? savedMode === "true" : prefersDark;
+
+        setIsDarkMode(shouldBeDark);
+        document.documentElement.setAttribute(
+            "data-bs-theme",
+            shouldBeDark ? "dark" : "light"
+        );
+    }, []);
 
     const cerrarSesion = async () => {
         try {
@@ -30,102 +59,81 @@ const NavbarModaExpress = () => {
         }
     };
 
-    // Detectar rutas especiales
     const esLogin = location.pathname === "/login";
     const esCatalogo =
         location.pathname === "/catalogo" &&
         localStorage.getItem("usuario-supabase") === null;
 
-    // ==================== CONTENIDO DEL MENÚ ====================
     let contenidoMenu;
 
     if (esLogin) {
         contenidoMenu = (
             <Nav className="ms-auto pe-2">
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/login")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
+                <Nav.Link onClick={() => manejarNavegacion("/login")}>
                     <i className="bi bi-person-fill-lock me-2"></i>
                     Iniciar sesión
                 </Nav.Link>
             </Nav>
         );
-    }
-    else if (esCatalogo) {
+    } else if (esCatalogo) {
         contenidoMenu = (
             <Nav className="ms-auto pe-2">
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/catalogo")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
+                <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
                     <i className="bi bi-images me-2"></i>
                     <strong>Catálogo</strong>
                 </Nav.Link>
             </Nav>
         );
-    }
-    else {
+    } else {
         contenidoMenu = (
             <Nav className="ms-auto pe-2">
-                {/* Inicio */}
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
-                    {mostrarMenu ? <i className="bi bi-house-fill me-2"></i> : null}
+
+                <Nav.Link onClick={() => manejarNavegacion("/")}>
+                    <i className="bi bi-house-fill me-2"></i>
                     <strong>Inicio</strong>
                 </Nav.Link>
 
-                {/* Categorías */}
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/categorias")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
-                    {mostrarMenu ? <i className="bi bi-bookmark-fill me-2"></i> : null}
+                <Nav.Link onClick={() => manejarNavegacion("/categorias")}>
+                    <i className="bi bi-bookmark-fill me-2"></i>
                     <strong>Categorías</strong>
                 </Nav.Link>
 
-                {/* Productos */}
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/productos")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
-                    {mostrarMenu ? <i className="bi bi-bag-heart-fill me-2"></i> : null}
+                <Nav.Link onClick={() => manejarNavegacion("/productos")}>
+                    <i className="bi bi-bag-heart-fill me-2"></i>
                     <strong>Productos</strong>
                 </Nav.Link>
 
-                {/* Catálogo público */}
-                <Nav.Link
-                    onClick={() => manejarNavegacion("/catalogo")}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                >
-                    {mostrarMenu ? <i className="bi bi-images me-2"></i> : null}
+                <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
+                    <i className="bi bi-images me-2"></i>
                     <strong>Catálogo</strong>
                 </Nav.Link>
 
+                <Nav.Link onClick={() => manejarNavegacion("/empleados")}>
+                    <i className="bi bi-images me-2"></i>
+                    <strong>Empleados</strong>
+                </Nav.Link>
 
-                {mostrarMenu ? null : (
-                    <NavLink
-                    onClick={cerrarSesion}
-                    className={mostrarMenu ? "color-texto-marca" : "text-white"}
-                    >
-                        <i className="bi-box-arrow-right me-2"></i>
-                    </NavLink>
-                )}
+                {/* 🌙 MODO OSCURO */}
+                <Nav.Link onClick={toggleDarkMode}>
+                    <i className={`bi ${isDarkMode ? "bi-sun" : "bi-moon"} me-2`}></i>
+                    <strong>{isDarkMode ? "Claro" : "Oscuro"}</strong>
+                </Nav.Link>
+
+                <NavLink onClick={cerrarSesion}>
+                    <i className="bi bi-box-arrow-right me-2"></i>
+                </NavLink>
 
                 <hr />
 
-                {/* Información del usuario */}
                 {mostrarMenu && (
-                    <div className="mt-3 p-3 rounded bg-light text-dark">
+                    <div className="mt-3 p-3 rounded bg-body-secondary text-body">
                         <p className="mb-2">
                             <i className="bi bi-envelope-fill me-2"></i>
-                            {localStorage.getItem("usuario-supabase")?.toLowerCase() || "Usuario"}
+                            {localStorage.getItem("usuario-supabase") || "Usuario"}
                         </p>
 
                         <button
-                            className="btn btn-outline-danger mt-3 w-100"
+                            className="btn btn-outline-danger w-100"
                             onClick={cerrarSesion}
                         >
                             <i className="bi bi-box-arrow-right me-2"></i>
@@ -137,7 +145,6 @@ const NavbarModaExpress = () => {
         );
     }
 
-
     return (
         <Navbar
             expand="md"
@@ -146,35 +153,27 @@ const NavbarModaExpress = () => {
             variant="dark"
         >
             <Container>
-                {/* Logo y Nombre */}
+
                 <Navbar.Brand
                     onClick={() => manejarNavegacion(esCatalogo ? "/catalogo" : "/")}
                     className="text-white fw-bold d-flex align-items-center"
                     style={{ cursor: "pointer" }}
                 >
                     <img
-                        alt="Logo Moda Express"
                         src={logo}
                         width="45"
                         height="45"
-                        className="d-inline-block me-2"
+                        className="me-2"
+                        alt="logo"
                     />
-                    <strong>
-                        <h4 className="mb-0">Moda Express</h4>
-                    </strong>
+                    <h4 className="mb-0">Moda Express</h4>
                 </Navbar.Brand>
 
-                {/* Botón Hamburguesa */}
                 {!esLogin && (
-                    <Navbar.Toggle
-                        aria-controls="menu-offcanvas"
-                        onClick={manejarToggle}
-                    />
+                    <Navbar.Toggle onClick={manejarToggle} />
                 )}
 
-                {/* Menú Lateral */}
                 <Navbar.Offcanvas
-                    id="menu-offcanvas"
                     placement="end"
                     show={mostrarMenu}
                     onHide={() => setMostrarMenu(false)}
@@ -187,6 +186,7 @@ const NavbarModaExpress = () => {
                         {contenidoMenu}
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>
+
             </Container>
         </Navbar>
     );
