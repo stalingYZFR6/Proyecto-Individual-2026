@@ -8,6 +8,8 @@ import TablaProductos from "../components/productos/TablaProductos";
 import ModalEliminacionProducto from "../components/productos/ModalEliminacionProducto";
 import TarjetaProductos from "../components/productos/TarjetasProductos";
 import ModalEdicionProducto from "../components/productos/ModalEdicionProducto";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const Productos = () => {
 
@@ -67,6 +69,91 @@ const Productos = () => {
         }
     };
 
+    const convertirImagenBase64 = (url) => {
+        return new Promise((resolve, reject) => {
+
+            const img = new Image();
+
+            img.crossOrigin = "Anonymous";
+
+            img.onload = () => {
+
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+
+                resolve(canvas.toDataURL("image/jpeg"));
+            };
+
+            img.onerror = reject;
+
+            img.src = url;
+        });
+    };
+
+
+    // 📄 PDF GENERAL DE PRODUCTOS
+    const generarPDFProductos = async () => {
+
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Reporte General de Productos", 14, 20);
+
+        doc.line(14, 25, 195, 25);
+
+        let y = 35;
+
+        for (const prod of productosFiltrados) {
+
+            // 📌 Datos
+            doc.setFontSize(12);
+
+            doc.text(`ID: ${prod.id_producto}`, 14, y);
+            doc.text(`Nombre: ${prod.nombre_producto}`, 14, y + 8);
+            doc.text(`Categoría: ${prod.categoria_producto}`, 14, y + 16);
+            doc.text(
+                `Precio: C$ ${parseFloat(prod.precio_venta).toFixed(2)}`,
+                14,
+                y + 24
+            );
+
+            // 📌 Imagen
+            if (prod.url_imagen) {
+
+                try {
+
+                    const imgData = await convertirImagenBase64(prod.url_imagen);
+
+                    doc.addImage(
+                        imgData,
+                        "JPEG",
+                        130,
+                        y,
+                        40,
+                        40
+                    );
+
+                } catch (error) {
+                    console.log("Error cargando imagen");
+                }
+            }
+
+            // 📌 Separación
+            y += 55;
+
+            // 📌 Nueva página
+            if (y > 240) {
+                doc.addPage();
+                y = 20;
+            }
+        }
+
+        doc.save("reporte_productos.pdf");
+    };
     // 🔹 Filtrar productos
     useEffect(() => {
         if (!textoBusqueda.trim()) {
@@ -192,18 +279,37 @@ const Productos = () => {
 
             {/* HEADER */}
             <Row className="align-items-center mb-3">
-                <Col className="d-flex align-items-center">
+                <Col xs={8} className="text-truncate d-flex align-items-center">
                     <h3 className="mb-0">
                         <i className="bi-bag-heart-fill me-2"></i> Productos
                     </h3>
                 </Col>
 
-                <Col xs={3} sm={5} md={5} lg={5} className="text-end">
-                    <Button onClick={() => setMostrarModal(true)}>
-                        <i className="bi-plus-lg"></i>
-                        <span className="d-none d-sm-inline ms-2">Nuevo Producto</span>
+
+                <Col className="text-end">
+                    <Button
+                        variant="danger"
+                        className="ms-2"
+                        onClick={generarPDFProductos}
+                    >
+                        <i className="bi bi-file-earmark-pdf"></i>
+
+                        <span className="d-none d-sm-inline">
+                            Descargar PDF
+                        </span>
                     </Button>
                 </Col>
+
+                <Col className="text-end">
+                    <Button onClick={() => setMostrarModal(true)}>
+                        <i className="bi bi-plus-lg"></i>
+
+                        <span className="d-none d-sm-inline">
+                            Nuevo Producto
+                        </span>
+                    </Button>
+                </Col>
+
             </Row>
 
             <hr />
@@ -231,6 +337,7 @@ const Productos = () => {
                         setProductoAEliminar(prod);
                         setMostrarModalEliminacion(true);
                     }}
+                    onPDF={(prod) => generarPDFProducto(prod)}
                 />
             </div>
 

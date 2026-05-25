@@ -20,7 +20,7 @@ const NavbarModaExpress = () => {
     };
 
     // =========================
-    // 🌙 MODO OSCURO
+    //  MODO OSCURO
     // =========================
     const toggleDarkMode = () => {
         const newMode = !isDarkMode;
@@ -86,61 +86,73 @@ const NavbarModaExpress = () => {
         );
     } else {
         contenidoMenu = (
-            <Nav className="ms-auto pe-2">
+            <Nav className="ms-auto pe-2 align-items-md-center">
 
-                <Nav.Link onClick={() => manejarNavegacion("/")}>
-                    <i className="bi bi-house-fill me-2"></i>
-                    <strong>Inicio</strong>
-                </Nav.Link>
+                {/* ================= MENÚ PRINCIPAL ================= */}
+                <div className="d-flex flex-column flex-md-row align-items-md-center">
 
-                <Nav.Link onClick={() => manejarNavegacion("/categorias")}>
-                    <i className="bi bi-bookmark-fill me-2"></i>
-                    <strong>Categorías</strong>
-                </Nav.Link>
+                    <Nav.Link onClick={() => manejarNavegacion("/")}>
+                        <i className="bi bi-house-fill me-2"></i>
+                        <strong>Inicio</strong>
+                    </Nav.Link>
 
-                <Nav.Link onClick={() => manejarNavegacion("/productos")}>
-                    <i className="bi bi-bag-heart-fill me-2"></i>
-                    <strong>Productos</strong>
-                </Nav.Link>
+                    <Nav.Link onClick={() => manejarNavegacion("/categorias")}>
+                        <i className="bi bi-bookmark-fill me-2"></i>
+                        <strong>Categorías</strong>
+                    </Nav.Link>
 
-                <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
-                    <i className="bi bi-images me-2"></i>
-                    <strong>Catálogo</strong>
-                </Nav.Link>
+                    <Nav.Link onClick={() => manejarNavegacion("/productos")}>
+                        <i className="bi bi-bag-heart-fill me-2"></i>
+                        <strong>Productos</strong>
+                    </Nav.Link>
 
-                <Nav.Link onClick={() => manejarNavegacion("/empleados")}>
-                    <i className="bi bi-images me-2"></i>
-                    <strong>Empleados</strong>
-                </Nav.Link>
+                    <Nav.Link onClick={() => manejarNavegacion("/ventas")}>
+                        <i className="bi bi-people-fill me-2"></i>
+                        <strong>Ventas</strong>
+                    </Nav.Link>
 
-                {/* 🌙 MODO OSCURO */}
-                <Nav.Link onClick={toggleDarkMode}>
-                    <i className={`bi ${isDarkMode ? "bi-sun" : "bi-moon"} me-2`}></i>
-                    <strong>{isDarkMode ? "Claro" : "Oscuro"}</strong>
-                </Nav.Link>
+                    <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
+                        <i className="bi bi-images me-2"></i>
+                        <strong>Catálogo</strong>
+                    </Nav.Link>
 
-                <NavLink onClick={cerrarSesion}>
-                    <i className="bi bi-box-arrow-right me-2"></i>
-                </NavLink>
+                    <Nav.Link onClick={() => manejarNavegacion("/empleados")}>
+                        <i className="bi bi-people-fill me-2"></i>
+                        <strong>Empleados</strong>
+                    </Nav.Link>
 
-                <hr />
+                    <Nav.Link onClick={() => manejarNavegacion("/clientes")}>
+                        <i className="bi bi-people-fill me-2"></i>
+                        <strong>Clientes</strong>
+                    </Nav.Link>
 
-                {mostrarMenu && (
-                    <div className="mt-3 p-3 rounded bg-body-secondary text-body">
-                        <p className="mb-2">
-                            <i className="bi bi-envelope-fill me-2"></i>
-                            {localStorage.getItem("usuario-supabase") || "Usuario"}
-                        </p>
+                </div>
 
-                        <button
-                            className="btn btn-outline-danger w-100"
-                            onClick={cerrarSesion}
-                        >
-                            <i className="bi bi-box-arrow-right me-2"></i>
-                            Cerrar sesión
-                        </button>
-                    </div>
-                )}
+                {/* ================= SEPARADOR ================= */}
+                <div className="vr mx-4 d-none d-md-block"></div>
+
+                <hr className="d-md-none" />
+
+                {/* ================= OPCIONES DERECHA ================= */}
+                <div className="d-flex flex-column flex-md-row align-items-md-center ms-md-3">
+
+                    <Nav.Link
+                        className="me-md-3"
+                        onClick={toggleDarkMode}
+                    >
+                        <i className={`bi ${isDarkMode ? "bi-sun" : "bi-moon"} me-2`}></i>
+
+                        <strong>{isDarkMode ? "Claro" : "Oscuro"}</strong>
+                    </Nav.Link>
+
+                    <Nav.Link onClick={cerrarSesion}>
+                        <i className="bi bi-box-arrow-right me-2"></i>
+
+                        <strong>Salir</strong>
+                    </Nav.Link>
+
+                </div>
+
             </Nav>
         );
     }

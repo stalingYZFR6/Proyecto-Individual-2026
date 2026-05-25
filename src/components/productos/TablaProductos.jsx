@@ -4,7 +4,8 @@ import { Table, Button, Image, Alert } from "react-bootstrap";
 const TablaProductos = ({
     productos,
     onEditar,
-    onEliminar
+    onEliminar,
+    onPDF
 }) => {
 
     if (!productos || productos.length === 0) {
