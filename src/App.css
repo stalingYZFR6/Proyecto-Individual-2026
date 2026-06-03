@@ -4,8 +4,23 @@
 }
 
 .color-navbar {
-    background-color: #8B6F47 !important;
-    background-image: linear-gradient(90deg, #121b96 0%, #2077c9 50%, #396cdb 100% );
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.color-navbar .nav-link {
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    transition: all .2s ease;
+}
+
+.color-navbar .nav-link:hover {
+    opacity: .7;
+}
+
+.color-navbar .bi-robot {
+    font-size: 1.2rem;
 }
 
 .color-texto-marca {

@@ -4,6 +4,9 @@ import { Container, Nav, Navbar, NavLink, Offcanvas } from "react-bootstrap";
 import logo from "../../assets/logo.jpg";
 import { supabase } from "../../database/supabaseconfig";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import ChatIA from "../ia/ChatIA";
+
+
 
 const NavbarModaExpress = () => {
     const [mostrarMenu, setMostrarMenu] = useState(false);
@@ -11,7 +14,7 @@ const NavbarModaExpress = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-
+const [mostrarChatIA, setMostrarChatIA] = useState(false);
     const manejarToggle = () => setMostrarMenu(!mostrarMenu);
 
     const manejarNavegacion = (ruta) => {
@@ -86,74 +89,78 @@ const NavbarModaExpress = () => {
         );
     } else {
         contenidoMenu = (
-            <Nav className="ms-auto pe-2 align-items-md-center">
+           <Nav className="ms-auto pe-2 align-items-md-center">
 
-                {/* ================= MENÚ PRINCIPAL ================= */}
-                <div className="d-flex flex-column flex-md-row align-items-md-center">
+    {/* Menú principal */}
+    <div className="d-flex flex-column flex-md-row align-items-md-center">
 
-                    <Nav.Link onClick={() => manejarNavegacion("/")}>
-                        <i className="bi bi-house-fill me-2"></i>
-                        <strong>Inicio</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/")}>
+            Inicio
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/categorias")}>
-                        <i className="bi bi-bookmark-fill me-2"></i>
-                        <strong>Categorías</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/dashboard")}>
+            Dashboard
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/productos")}>
-                        <i className="bi bi-bag-heart-fill me-2"></i>
-                        <strong>Productos</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/categorias")}>
+            Categorías
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/ventas")}>
-                        <i className="bi bi-people-fill me-2"></i>
-                        <strong>Ventas</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/productos")}>
+            Productos
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
-                        <i className="bi bi-images me-2"></i>
-                        <strong>Catálogo</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/ventas")}>
+            Ventas
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/empleados")}>
-                        <i className="bi bi-people-fill me-2"></i>
-                        <strong>Empleados</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/catalogo")}>
+            Catálogo
+        </Nav.Link>
 
-                    <Nav.Link onClick={() => manejarNavegacion("/clientes")}>
-                        <i className="bi bi-people-fill me-2"></i>
-                        <strong>Clientes</strong>
-                    </Nav.Link>
+        <Nav.Link onClick={() => manejarNavegacion("/empleados")}>
+            Empleados
+        </Nav.Link>
 
-                </div>
+        <Nav.Link onClick={() => manejarNavegacion("/clientes")}>
+            Clientes
+        </Nav.Link>
 
-                {/* ================= SEPARADOR ================= */}
-                <div className="vr mx-4 d-none d-md-block"></div>
+        {/* Chat IA */}
+        <Nav.Link
+            onClick={() => setMostrarChatIA(true)}
+            className="ms-md-3"
+        >
+            <i className="bi bi-robot"></i>
+        </Nav.Link>
 
-                <hr className="d-md-none" />
+    </div>
 
-                {/* ================= OPCIONES DERECHA ================= */}
-                <div className="d-flex flex-column flex-md-row align-items-md-center ms-md-3">
+    <div className="vr mx-3 d-none d-md-block"></div>
 
-                    <Nav.Link
-                        className="me-md-3"
-                        onClick={toggleDarkMode}
-                    >
-                        <i className={`bi ${isDarkMode ? "bi-sun" : "bi-moon"} me-2`}></i>
+    {/* Opciones */}
+    <div className="d-flex flex-column flex-md-row align-items-md-center">
 
-                        <strong>{isDarkMode ? "Claro" : "Oscuro"}</strong>
-                    </Nav.Link>
+    <Nav.Link
+        onClick={toggleDarkMode}
+        className="me-md-2"
+        title={isDarkMode ? "Modo claro" : "Modo oscuro"}
+    >
+        <i className={`bi ${isDarkMode ? "bi-sun-fill" : "bi-moon-fill"}`}></i>
+    </Nav.Link>
 
-                    <Nav.Link onClick={cerrarSesion}>
-                        <i className="bi bi-box-arrow-right me-2"></i>
+    <Nav.Link onClick={cerrarSesion}>
+        Salir
+    </Nav.Link>
 
-                        <strong>Salir</strong>
-                    </Nav.Link>
+</div>
 
-                </div>
+    <ChatIA
+        mostrar={mostrarChatIA}
+        onCerrar={() => setMostrarChatIA(false)}
+    />
 
-            </Nav>
+</Nav>
         );
     }
 

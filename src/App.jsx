@@ -12,6 +12,7 @@ import Login from "./views/Login";
 import Clientes from './views/Clientes';
 import RutaProtegida from "./components/rutas/RutaProtegida";
 import Pagina404 from "./views/Pagina404";
+import Dashboard from './views/Dashboard';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<RutaProtegida><Inicio /></RutaProtegida>} />
+          <Route path="/dashboard" element={<RutaProtegida><Dashboard/></RutaProtegida>} />
           <Route path="/categorias" element={<RutaProtegida><Categorias /></RutaProtegida>} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/empleados" element={<Empleados />} />
