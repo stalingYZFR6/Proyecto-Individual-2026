@@ -10,6 +10,7 @@ import TarjetaProductos from "../components/productos/TarjetasProductos";
 import ModalEdicionProducto from "../components/productos/ModalEdicionProducto";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import ModalQRProducto from "../components/productos/ModalQRProducto";
 
 const Productos = () => {
 
@@ -17,6 +18,24 @@ const Productos = () => {
     const [productosFiltrados, setProductosFiltrados] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [textoBusqueda, setTextoBusqueda] = useState("");
+
+    const [mostrarModalQR, setMostrarModalQR] = useState(false);
+    const [productoQR, setProductoQR] = useState(null);
+
+    // generar qr
+    const generarQRImagen = (producto) => {
+        if (!producto?.url_imagen) {
+            setToast({
+                mostrar: true,
+                mensaje: "Este producto no tiene imagen asociada",
+                tipo: "advertencia"
+            });
+            return;
+        }
+
+        setProductoQR(producto);
+        setMostrarModalQR(true);
+    };
 
     // eliminacon
     const [mostrarModalEliminacion, setMostrarModalEliminacion] = useState(false);
@@ -66,6 +85,36 @@ const Productos = () => {
             setCategorias(data || []);
         } catch (err) {
             console.error("Error al cargar categorías:", err);
+        }
+    };
+
+    // copiarProducto
+    const copiarProducto = async (producto) => {
+        if (!producto) return;
+
+        const texto = `ID: ${producto.id_producto}
+Nombre: ${producto.nombre_producto}
+Descripción: ${producto.descripcion_producto || "Sin descripción"}
+Categoría: ${producto.categoria_producto}
+Precio: C$ ${parseFloat(producto.precio_venta).toFixed(2)}`;
+
+        try {
+            await navigator.clipboard.writeText(texto);
+
+            setToast({
+                mostrar: true,
+                mensaje: `Producto "${producto.nombre_producto}" copiado al portapapeles`,
+                tipo: "exito",
+            });
+
+        } catch (err) {
+            console.error("Error al copiar:", err);
+
+            setToast({
+                mostrar: true,
+                mensaje: "No se pudo copiar al portapapeles",
+                tipo: "error",
+            });
         }
     };
 
@@ -338,6 +387,8 @@ const Productos = () => {
                         setMostrarModalEliminacion(true);
                     }}
                     onPDF={(prod) => generarPDFProducto(prod)}
+                    copiarProducto={copiarProducto} 
+                    generarQRImagen={generarQRImagen}
                 />
             </div>
 
@@ -353,6 +404,7 @@ const Productos = () => {
                         setProductoAEliminar(prod);
                         setMostrarModalEliminacion(true);
                     }}
+                    copiarProducto={copiarProducto}
                 />
             </div>
 
@@ -392,6 +444,12 @@ const Productos = () => {
                 mensaje={toast.mensaje}
                 tipo={toast.tipo}
                 onCerrar={() => setToast({ ...toast, mostrar: false })}
+            />
+
+            <ModalQRProducto
+                mostrar={mostrarModalQR}
+                onHide={() => setMostrarModalQR(false)}
+                producto={productoQR}
             />
 
         </Container>

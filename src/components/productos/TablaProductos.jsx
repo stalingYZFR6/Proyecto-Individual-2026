@@ -5,7 +5,8 @@ const TablaProductos = ({
     productos,
     onEditar,
     onEliminar,
-    onPDF
+    copiarProducto,
+    generarQRImagen
 }) => {
 
     if (!productos || productos.length === 0) {
@@ -33,6 +34,7 @@ const TablaProductos = ({
             <tbody>
                 {productos.map((prod, index) => (
                     <tr key={prod.id_producto}>
+
                         <td className="text-center">{index + 1}</td>
 
                         <td className="text-center">
@@ -53,7 +55,9 @@ const TablaProductos = ({
 
                         <td>
                             {prod.descripcion_producto || (
-                                <span className="text-muted">Sin descripción</span>
+                                <span className="text-muted">
+                                    Sin descripción
+                                </span>
                             )}
                         </td>
 
@@ -67,6 +71,7 @@ const TablaProductos = ({
 
                         <td className="text-center">
 
+                            {/* EDITAR */}
                             <Button
                                 variant="outline-warning"
                                 size="sm"
@@ -76,6 +81,29 @@ const TablaProductos = ({
                                 <i className="bi bi-pencil-square"></i>
                             </Button>
 
+                            {/* COPIAR */}
+                            <Button
+                                variant="outline-success"
+                                size="sm"
+                                className="m-1"
+                                onClick={() => copiarProducto(prod)}
+                                title="Copiar al portapapeles"
+                            >
+                                <i className="bi bi-clipboard"></i>
+                            </Button>
+
+                            {/* QR */}
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                className="m-1"
+                                onClick={() => generarQRImagen(prod)}
+                                title="Generar QR"
+                            >
+                                <i className="bi bi-qr-code"></i>
+                            </Button>
+
+                            {/* ELIMINAR */}
                             <Button
                                 variant="outline-danger"
                                 size="sm"
