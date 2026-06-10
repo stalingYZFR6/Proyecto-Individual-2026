@@ -6,7 +6,7 @@ import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import Paginacion from "../components/ordenamiento/Paginacion";
 import TablaVentas from "../components/ventas/TablaVentas";
 import TarjetaVenta from "../components/ventas/TarjetaVenta";
-import FormularioVenta from "../components/ventas/FormularioVenta";
+import FormularioVenta from "../components/ventas/Formularioventa"
 
 const Ventas = () => {
   const [toast, setToast] = useState({ mostrar: false, mensaje: "", tipo: "" });
